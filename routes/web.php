@@ -13,16 +13,33 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+Route::get('/welcome', function () {
     return view('welcome');
 });
+
+Route::middleware(['auth:sanctum'])->group(function(){
+
+    Route::get('/page1', [App\Http\Livewire\DashboardTable::class, '__invoke']); 
+
+    Route::get('/page5', function () { 
+        return 'Hello page5';
+    }); 
+});
+
 
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified'
 ])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+
+    // 127.0.0.1:8000/dashboard
+    Route::get('/dashboard', function () { return view('dashboard');})->name('dashboard');
+    
+    // 127.0.0.1:8000/dashboard-table 
+    // www.google.co.th/dashboard-table
+    Route::get('/dashboard-table', function () { 
+        return 'Hello dashboard table';
+    });
+    
 });
